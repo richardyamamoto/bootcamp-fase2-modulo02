@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Sequelize, { Model } from 'sequelize';
 
 import bcrypt from 'bcryptjs';
@@ -24,6 +23,10 @@ class User extends Model {
       }
     });
     return this;
+  }
+
+  checkPassword(password) {
+    return bcrypt.compare(password, this.password_hash);
   }
 }
 
