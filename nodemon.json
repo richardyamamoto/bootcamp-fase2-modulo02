@@ -3,6 +3,7 @@
     "js": "sucrase-node"
   },
   "events": {
+    "restart": "kill-port 3333",
     "crash": "kill-port 3333"
   },
   "delay": "1500"
