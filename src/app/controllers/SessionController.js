@@ -13,21 +13,27 @@ class SessionController {
       password: Yup.string().required(),
     });
 
+    // Validate the JSON fields
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
+    // Call the attributes form the request body
     const { email, password } = req.body;
 
+    // Search for users that have a registered email
     const user = await User.findOne({ where: { email } });
 
+    // If there is no valid user
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
 
+    // Check the password
     if (!(await user.checkPassword(password))) {
       return res.status(400).json({ error: 'Password does not match' });
     }
 
+    // Call the attributes from the user
     const { id, name } = user;
 
     return res.json({
@@ -36,6 +42,10 @@ class SessionController {
         name,
         email,
       },
+      /*
+        Check the password using the JWT token
+        Second parameter is a secret word
+      */
       token: jwt.sign({ id }, '295ce57763892728eac27bee079b9615', {
         expiresIn: '7d',
       }),

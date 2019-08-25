@@ -8,6 +8,7 @@ class File extends Model {
         path: Sequelize.STRING,
         url: {
           type: Sequelize.VIRTUAL,
+          // Method that includes a attribute on JSON
           get() {
             return `http://localhost:3333/files/${this.path}`;
           },

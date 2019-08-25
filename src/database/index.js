@@ -17,6 +17,7 @@ class Database {
     this.connection = new Sequelize(databaseConfig);
     models
       .map(model => model.init(this.connection))
+      // Do the associations of foreign keys
       .map(model => model.associate && model.associate(this.connection.models));
     return this;
   }

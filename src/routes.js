@@ -20,6 +20,7 @@ routes.post('/sessions', SessionController.store);
 
 routes.get('/providers', ProviderController.index);
 
+// Check the session authorization
 routes.use(authMiddleware);
 
 routes.post('/appointments', AppointmentController.store);

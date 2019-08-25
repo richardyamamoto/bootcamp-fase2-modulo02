@@ -15,6 +15,10 @@ class Appointment extends Model {
   }
 
   static associate(models) {
+    /*
+    Connect the user_id attribute from the user table to the appointment table
+    Create a nickname for those foreign keys
+    */
     this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
     this.belongsTo(models.User, {
       foreignKey: 'provider_id',

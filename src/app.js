@@ -12,7 +12,9 @@ class App {
   }
 
   middlewares() {
+    // Allow the express to read JSON
     this.server.use(express.json());
+    // Allow the express to read static files
     this.server.use(
       '/files',
       express.static(path.resolve(__dirname, '..', 'temp', 'uploads'))

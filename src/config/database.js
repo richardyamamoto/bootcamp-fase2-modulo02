@@ -1,3 +1,4 @@
+// Database data to connect with Postgres
 module.exports = {
   dialect: 'postgres',
   host: 'localhost',
