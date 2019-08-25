@@ -6,9 +6,6 @@ class Appointment extends Model {
       {
         date: Sequelize.DATE,
         canceled_at: Sequelize.DATE,
-        password: Sequelize.VIRTUAL,
-        password_hash: Sequelize.STRING,
-        provider: Sequelize.BOOLEAN,
       },
       {
         sequelize,
@@ -19,7 +16,10 @@ class Appointment extends Model {
 
   static associate(models) {
     this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-    this.belongsTo(models.User, { foreignKey: 'provider_id', as: 'provider' });
+    this.belongsTo(models.User, {
+      foreignKey: 'provider_id',
+      as: 'provider',
+    });
   }
 }
 
