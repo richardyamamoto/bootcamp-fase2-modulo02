@@ -37,7 +37,20 @@ class AppointmentController {
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past date are not allowed' });
     }
+    // Check availability
+    const checkAvailability = await Appointment.findOne({
+      where: {
+        provider_id,
+        canceled_at: null,
+        date: hourStart,
+      },
+    });
 
+    if (checkAvailability) {
+      return res
+        .status(401)
+        .json({ error: 'Appointment date is not available' });
+    }
     // Create appointment
     const appointment = await Appointment.create({
       user_id: req.userId,
