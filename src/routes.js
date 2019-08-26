@@ -12,21 +12,30 @@ import AppointmentController from './app/controllers/AppointmentController';
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
+// Call the multer configuration
 const upload = multer(multerConfig);
 
+// Users
 routes.post('/users', UserController.store);
 
+// Session
 routes.post('/sessions', SessionController.store);
-
-routes.get('/providers', ProviderController.index);
 
 // Check the session authorization
 routes.use(authMiddleware);
 
+// Users in session
+routes.put('/users', UserController.update);
+
+// Providers
+routes.get('/providers', ProviderController.index);
+
+// Appointments
+routes.get('/appointments', AppointmentController.index);
+
 routes.post('/appointments', AppointmentController.store);
 
+// Files
 routes.post('/files', upload.single('file'), FileController.store);
-
-routes.put('/users', UserController.update);
 
 export default routes;
