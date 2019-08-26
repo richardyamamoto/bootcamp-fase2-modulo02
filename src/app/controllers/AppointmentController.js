@@ -5,6 +5,7 @@ import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notifications';
+import Mail from '../../lib/Mail';
 
 class AppointmentController {
   // Create appointments
@@ -116,25 +117,45 @@ class AppointmentController {
     return res.json(appointments);
   }
 
-  // Delete appointment by Id
+  // Cancel appointment by Id
   async delete(req, res) {
-    const appointment = await Appointment.findByPk(req.params.id);
+    // Search appointment by primary key
+    const appointment = await Appointment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+    // Check if user id of appointment is the same of the user logged
     if (appointment.user_id !== req.userId) {
       return res
         .status(401)
         .json({ error: "You don't have permission to cancel an appointment" });
     }
 
+    // Appointment date minus 2 hours
     const dateWithSub = subHours(appointment.date, 2);
-
+    // Check if date minus 2 hours is before the current time
     if (isBefore(dateWithSub, new Date())) {
       return res
         .status(401)
         .json({ error: 'Can only cancel with 2 hours advance' });
     }
-    appointment.canceled_at = new Date();
 
+    // Set attribute canceled_at to the current time date
+    appointment.canceled_at = new Date();
+    // Saving the alterations
     await appointment.save();
+
+    // Send mail
+    await Mail.sendMail({
+      to: `${appointment.provider.name} <${appointment.provider.email}>`,
+      subject: 'Agendamento cancelado',
+      text: 'Você tem um novo cancelamento',
+    });
     return res.json(appointment);
   }
 }
