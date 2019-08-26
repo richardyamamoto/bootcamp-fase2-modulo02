@@ -2,6 +2,7 @@ import User from '../models/User';
 import Notification from '../schemas/Notifications';
 
 class NotificationController {
+  // List notification
   async index(req, res) {
     // Check if logged user is provider
     const isProvider = await User.findOne({
@@ -26,11 +27,12 @@ class NotificationController {
 
   // Update notification to readed
   async update(req, res) {
-    // const notification = await Notification.findById(req.params.id);
-
+    // Using a mongoose method that find and update
     const notification = await Notification.findByIdAndUpdate(
       req.params.id,
+      // Update the attribute to true
       { read: true },
+      // Return the updated notification
       { new: true }
     );
     return res.json(notification);
