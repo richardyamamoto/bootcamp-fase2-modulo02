@@ -121,6 +121,7 @@ class AppointmentController {
   async delete(req, res) {
     // Search appointment by primary key
     const appointment = await Appointment.findByPk(req.params.id, {
+      // Include more attibutes
       include: [
         {
           model: User,
@@ -152,6 +153,8 @@ class AppointmentController {
 
     // Send mail
     await Mail.sendMail({
+      // Default format for recipient
+      // name <email>
       to: `${appointment.provider.name} <${appointment.provider.email}>`,
       subject: 'Agendamento cancelado',
       text: 'Você tem um novo cancelamento',
