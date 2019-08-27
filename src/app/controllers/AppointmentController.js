@@ -156,23 +156,6 @@ class AppointmentController {
     // Saving the alterations
     await appointment.save();
 
-    // Send mail
-    await Mail.sendMail({
-      // Default format for recipient
-      // name <email>
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: 'Agendamento cancelado',
-      // Email template
-      template: 'cancellation',
-      // Binds that template is waiting
-      context: {
-        provider: appointment.provider.name,
-        user: appointment.user.name,
-        date: format(appointment.date, "'dia' dd 'de' MMMM', às' H:mm'h'", {
-          locale: pt,
-        }),
-      },
-    });
     return res.json(appointment);
   }
 }
