@@ -128,6 +128,11 @@ class AppointmentController {
           as: 'provider',
           attributes: ['name', 'email'],
         },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
       ],
     });
     // Check if user id of appointment is the same of the user logged
@@ -157,7 +162,16 @@ class AppointmentController {
       // name <email>
       to: `${appointment.provider.name} <${appointment.provider.email}>`,
       subject: 'Agendamento cancelado',
-      text: 'Você tem um novo cancelamento',
+      // Email template
+      template: 'cancellation',
+      // Binds that template is waiting
+      context: {
+        provider: appointment.provider.name,
+        user: appointment.user.name,
+        date: format(appointment.date, "'dia' dd 'de' MMMM', às' H:mm'h'", {
+          locale: pt,
+        }),
+      },
     });
     return res.json(appointment);
   }

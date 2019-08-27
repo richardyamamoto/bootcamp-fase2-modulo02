@@ -21,8 +21,8 @@ class Mail {
   // Set configuration for email templates
   configureTemplates() {
     // Directory for templates
-    const viewPath = resolve('__dirname', '..', 'app', 'views', 'emails');
-    // Method that nodemailer compile templates
+    const viewPath = resolve(__dirname, '..', 'app', 'views', 'emails');
+    // Method that nodemailer compile and format templates
     this.transporter.use(
       'compile',
       nodemailerhbs({
@@ -43,7 +43,7 @@ class Mail {
   }
 
   sendMail(message) {
-    this.transporter.sendMail({
+    return this.transporter.sendMail({
       // Use everthing in mailConfig.default
       ...mailConfig.default,
       // Use everthing in message
